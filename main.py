@@ -13,6 +13,7 @@ DATA_PATH = 'data'
 parser = argparse.ArgumentParser(description='Train a neural machine translation model')
 
 parser.add_argument('--model', default='cnn', help='Model type: cnn/gru')
+parser.add_argument('--log', default='default', help='Tensorboard log dir')
 parser.add_argument('--cuda', default=False, action='store_true', help='use cuda')
 
 # Parse arguments
@@ -77,6 +78,7 @@ if args.model == 'cnn':
                   optimizer=keras.optimizers.Adadelta(),
                   metrics=['categorical_accuracy'])
     history = model.fit(train_x, train_y_categorical, batch_size=100, epochs=200,
+                        callbacks=[keras.callbacks.TensorBoard(log_dir='logs\\'+args.log, histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None, embeddings_data=None)],
                         validation_data=(test_x, test_y_categorical))
 
 if args.model == 'gru':
@@ -91,4 +93,9 @@ if args.model == 'gru':
                   optimizer=keras.optimizers.Adam(lr=5e-4),
                   metrics=['categorical_accuracy'])
     history = model.fit(train_x, train_y_categorical, batch_size=100, epochs=200,
+                        callbacks=[
+                            keras.callbacks.TensorBoard(log_dir='logs\\' + args.log, histogram_freq=0, batch_size=32,
+                                                        write_graph=True, write_grads=False, write_images=False,
+                                                        embeddings_freq=0, embeddings_layer_names=None,
+                                                        embeddings_metadata=None, embeddings_data=None)],
                         validation_data=(test_x, test_y_categorical))
