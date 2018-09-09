@@ -4,7 +4,7 @@ import numpy as np
 import os
 from keras.utils import to_categorical
 
-DATA_PATH = 'data'
+DATA_PATH = 'raw_data'
 
 
 def get_labels(path=DATA_PATH):
@@ -45,4 +45,5 @@ def save_data_to_array(path=DATA_PATH, max_len=11):
         print('saved data : ', label)
 
 
-save_data_to_array()
+if __name__ == '__main__':
+    save_data_to_array()
