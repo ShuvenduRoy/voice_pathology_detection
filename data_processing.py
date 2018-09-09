@@ -46,4 +46,4 @@ def save_data_to_array(path=DATA_PATH, max_len=11):
 
 
 if __name__ == '__main__':
-    save_data_to_array()
+    save_data_to_array(max_len=50)
