@@ -66,7 +66,10 @@ if args.model == 'cnn':
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(2, 2), activation='relu', input_shape=(y, z, 1)))
     model.add(MaxPooling2D(pool_size=(2, 2)))
-    model.add(Dropout(0.25))
+    # model.add(Dropout(0.25))
+    model.add(Conv2D(32, kernel_size=(2, 2), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    # model.add(Dropout(0.25))
     model.add(Flatten())
     model.add(Dense(128, activation='relu'))
     model.add(Dropout(0.25))
@@ -75,9 +78,9 @@ if args.model == 'cnn':
     model.summary()
     # train the model
     model.compile(loss=keras.losses.categorical_crossentropy,
-                  optimizer=keras.optimizers.Adadelta(),
+                  optimizer=keras.optimizers.Adadelta(9e-4),
                   metrics=['categorical_accuracy'])
-    history = model.fit(train_x, train_y_categorical, batch_size=100, epochs=200,
+    history = model.fit(train_x, train_y_categorical, batch_size=128, epochs=500,
                         callbacks=[keras.callbacks.TensorBoard(log_dir='logs\\'+args.log, histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None, embeddings_data=None)],
                         validation_data=(test_x, test_y_categorical))
 
@@ -92,7 +95,7 @@ if args.model == 'gru':
     model.compile(loss=keras.losses.binary_crossentropy,
                   optimizer=keras.optimizers.Adam(lr=5e-4),
                   metrics=['categorical_accuracy'])
-    history = model.fit(train_x, train_y_categorical, batch_size=100, epochs=200,
+    history = model.fit(train_x, train_y_categorical, batch_size=100, epochs=250,
                         callbacks=[
                             keras.callbacks.TensorBoard(log_dir='logs\\' + args.log, histogram_freq=0, batch_size=32,
                                                         write_graph=True, write_grads=False, write_images=False,
