@@ -37,7 +37,7 @@ def save_data_to_array(path=DATA_PATH, max_len=11):
         # Init mfcc vectors
         mfcc_vectors = []
 
-        wavfiles = [path +'\\'+ label + '\\' + wavfile for wavfile in os.listdir(path + '\\' + label)]
+        wavfiles = [path + '\\' + label + '\\' + wavfile for wavfile in os.listdir(path + '\\' + label)]
         for wavfile in tqdm(wavfiles, "Saving vectors of label - '{}'".format(label)):
             mfcc = wav2mfcc(wavfile, max_len=max_len)
             mfcc_vectors.append(mfcc)
@@ -45,5 +45,37 @@ def save_data_to_array(path=DATA_PATH, max_len=11):
         print('saved data : ', label)
 
 
+def save_data_to_array_nonhuman_only(path=DATA_PATH, max_len=11):
+    labels, _, _ = get_labels(path)
+
+    for label in labels:
+        # Init mfcc vectors
+        mfcc_vectors = []
+
+        wavfiles = [path + '\\' + label + '\\' + wavfile for wavfile in os.listdir(path + '\\' + label)]
+        for wavfile in tqdm(wavfiles, "Saving vectors of label - '{}'".format(label)):
+            if wavfile[-7:] == 'egg.wav':
+                mfcc = wav2mfcc(wavfile, max_len=max_len)
+                mfcc_vectors.append(mfcc)
+        np.save('data\\' + label + '.npy', mfcc_vectors)
+        print('saved data : ', label)
+
+
+def save_data_to_array_voice_only(path=DATA_PATH, max_len=11):
+    labels, _, _ = get_labels(path)
+
+    for label in labels:
+        # Init mfcc vectors
+        mfcc_vectors = []
+
+        wavfiles = [path + '\\' + label + '\\' + wavfile for wavfile in os.listdir(path + '\\' + label)]
+        for wavfile in tqdm(wavfiles, "Saving vectors of label - '{}'".format(label)):
+            if wavfile[-7:] != 'egg.wav':
+                mfcc = wav2mfcc(wavfile, max_len=max_len)
+                mfcc_vectors.append(mfcc)
+        np.save('data\\' + label + '.npy', mfcc_vectors)
+        print('saved data : ', label)
+
+
 if __name__ == '__main__':
-    save_data_to_array(max_len=50)
+    save_data_to_array_voice_only(max_len=50)

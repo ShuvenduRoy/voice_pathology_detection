@@ -14,6 +14,8 @@ parser = argparse.ArgumentParser(description='Train a neural machine translation
 
 parser.add_argument('--model', default='cnn', help='Model type: cnn/gru')
 parser.add_argument('--log', default='default', help='Tensorboard log dir')
+parser.add_argument('--n_epochs', default=300, help='number of epoch')
+parser.add_argument('--lr', default=1e-4, type=float, help='number of epoch')
 parser.add_argument('--cuda', default=False, action='store_true', help='use cuda')
 
 # Parse arguments
@@ -78,9 +80,9 @@ if args.model == 'cnn':
     model.summary()
     # train the model
     model.compile(loss=keras.losses.categorical_crossentropy,
-                  optimizer=keras.optimizers.Adadelta(9e-4),
+                  optimizer=keras.optimizers.Adam(args.lr),
                   metrics=['categorical_accuracy'])
-    history = model.fit(train_x, train_y_categorical, batch_size=128, epochs=500,
+    history = model.fit(train_x, train_y_categorical, batch_size=128, epochs=350,
                         callbacks=[keras.callbacks.TensorBoard(log_dir='logs\\'+args.log, histogram_freq=0, batch_size=32, write_graph=True, write_grads=False, write_images=False, embeddings_freq=0, embeddings_layer_names=None, embeddings_metadata=None, embeddings_data=None)],
                         validation_data=(test_x, test_y_categorical))
 
